@@ -92,12 +92,18 @@ def request_finished_signal(sender, **kwargs) -> None:
     if request_exclusion(request, function):
         return
     
-    logger_ip = f' from {request.ip}' if get_client_ip and settings.request.ip else ''
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        logger_ip = x_forwarded_for.split(',')[0]
+    else:
+        logger_ip = request.META.get('REMOTE_ADDR')
+    
+    # logger_ip = f' from {request.ip}' if get_client_ip and settings.request.ip else ''
     logger.log(
         level,
         f'[{request.method}] [{request.status}] '
-        f'{getattr(request, "user", None)} ',
-        # f'at {request.uri}{logger_ip}',
+        f'{getattr(request, "user", None)} '
+        f'at {request.uri}{logger_ip}',
         extra={'action': 'request', 'event': request},
     )
 

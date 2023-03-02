@@ -125,13 +125,6 @@ class AutomatedLoggingMiddleware:
             return None
 
         if isinstance(environ.request.user, AnonymousUser):
-            # return None
-            # Add ip address support 
-            x_forwarded_for = environ.request.META.get('HTTP_X_FORWARDED_FOR')
-            if x_forwarded_for:
-                ip = x_forwarded_for.split(',')[0]
-            else:
-                ip = environ.request.META.get('REMOTE_ADDR')
-            return ip
+            return None
 
         return environ.request.user

@@ -96,8 +96,8 @@ def request_finished_signal(sender, **kwargs) -> None:
     logger.log(
         level,
         f'[{request.method}] [{request.status}] '
-        f'{getattr(request, "user", None) or "Anonymous"} '
-        f'at {request.uri}{logger_ip}',
+        f'{getattr(request, "user", None)} '
+        # f'at {request.uri}{logger_ip}',
         extra={'action': 'request', 'event': request},
     )
 
